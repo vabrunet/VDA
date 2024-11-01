@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets DataTable</title>
+    <!-- Include jQuery and DataTables CSS/JS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Google Sheets Data</h1>
+<table id="data-table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Date</th>
+            <th>Chiffre</th>
+            <th>Label</th>
+            <!-- Add more headers as needed -->
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Data will be inserted here -->
+    </tbody>
+</table>
+
+<script>
+    // Replace with your Google Sheets published CSV URL
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTffmzU4ZG8KmtM6BdXXruTkVoyO-o7vC83oGPkalH1lQfxzIGmBto9YKGQM1NiEwf0UIxR5dVT2WIn/pub?gid=0&single=true&output=csv';
+
+    $(document).ready(function() {
+        // Fetch data from Google Sheets
+        $.ajax({
+            url: sheetUrl,
+            dataType: 'text',
+        }).done(function(data) {
+            const rows = data.split("\n").slice(1); // Skip the header row
+            rows.forEach(function(row) {
+                const cols = row.split(","); // Assuming CSV format
+                if (cols.length > 1) {
+                    $("#data-table tbody").append("<tr><td>" + cols.join("</td><td>") + "</td></tr>");
+                }
+            });
+
+            // Initialize DataTables
+            $('#data-table').DataTable();
+        });
+    });
+</script>
+
+</body>
+</html>
